@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+   {% load static %}
+   {% block content %}
+<style>
+       body {
+  background-color: #e0f7fa;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 100px);
+  padding: 20px;
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+}
+
+p {
+
+  margin-bottom: 10px;
+}
+
+form {
+
+}
+
+.photo-container {
+    margin: 10px;
+    width: 200px;
+    height: auto;
+    overflow: hidden;
+    display: inline-block;
+}
+
+
+a{
+  text-decoration: none;
+  color: #333;
+}
+a:hover{
+  text-decoration: underline;
+}
+
+button{
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover{
+  background-color: #0069d9;
+}
+
+    </style>
+<div class="container">
+       <h1>Галерея</h1>
+       <a href="{% url 'create_folder' %}">Создать папку</a>
+       <a href="{% url 'upload_photo' %}">Загрузить фото</a>
+
+       <h2>Папки</h2>
+       <ul>
+           {% for folder in folders %}
+               <li><h2><a href="{% url 'folder_detail' folder.pk %}">{{ folder.name }}</a></h2> ({{ folder.photos.count }} фото)</li>
+           {% endfor %}
+       </ul>
+
+       <h2>Фотографии</h2>
+       <div class="gallery">
+           {% for folder in folders %}
+           <h2 >{{ folder.name }}  ({{ folder.photos.count }} фото)</h2>
+            {% for photo in folder.photos.all %}
+                <div class="photo-container">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                    <p>{{ photo.title }}</p>
+                    <p>{{ photo.description }}</p>
+                </div>
+           {% endfor %}
+           {% endfor %}
+       </div>
+
+   {% endblock %}
+<div class="container">
+   <style>
+       .gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+       .gallery-item { flex-basis: calc(33% - 20px); box-sizing: border-box; }
+       .gallery-item img { max-width: 100%; height: auto; display: block; }
+   </style>
